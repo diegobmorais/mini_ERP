@@ -12,7 +12,6 @@ class Order_model extends CI_Model
         $this->db->where('id', $order_id);
         return $this->db->delete('orders');
     }
-
     public function update_order_status($order_id, $status)
     {
         $this->db->where('id', $order_id);

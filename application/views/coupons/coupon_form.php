@@ -19,7 +19,6 @@
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Gestão de Cupons</h5>
@@ -48,7 +47,6 @@
                         </form>
                     </div>
                 </div>
-
                 <div class="card shadow-sm">
                     <div class="card-header bg-secondary text-white">
                         <h6 class="mb-0">Cupons Existentes</h6>
@@ -77,7 +75,6 @@
                         <?php endif; ?>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

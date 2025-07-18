@@ -8,7 +8,6 @@
 </head>
 
 <body class="bg-light">
-
     <div class="container mt-5">
         <div class="text-center py-3">
             <h3>Gestão de Produtos</h3>
@@ -115,7 +114,6 @@
                                             </select>
                                         </div>
                                     </div>
-
                                     <div class="text-end" style="flex: 1 1 35%;">
                                         <span class="d-block">R$ <?= number_format($product->price, 2, ',', '.') ?></span>
 
@@ -127,7 +125,6 @@
                                     </div>
                                 </li>
                             <?php endforeach; ?>
-
                             <?php if (empty($products)): ?>
                                 <li class="list-group-item text-muted">Nenhum produto registrado no momento.</li>
                             <?php endif; ?>
@@ -262,7 +259,6 @@
                 alert('Por favor, selecione uma variação antes de comprar.');
                 return;
             }
-
             fetch('<?= base_url('product/buy') ?>', {
                     method: 'POST',
                     headers: {
@@ -297,24 +293,20 @@
                     div.classList.add('cart-item-box', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2', 'p-2');
 
                     div.innerHTML = `
-                <div>
-                    <strong>${item.name}</strong><br>
-                    <small>${item.quantity}x R$ ${unitPrice}</small><br>
-                    <strong>Total: R$ ${totalPrice}</strong>
-                </div>
-                <button class="btn btn-sm btn-danger" onclick="removeCartItem(${index})">Excluir</button>
-            `;
-
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            <small>${item.quantity}x R$ ${unitPrice}</small><br>
+                            <strong>Total: R$ ${totalPrice}</strong>
+                        </div>
+                        <button class="btn btn-sm btn-danger" onclick="removeCartItem(${index})">Excluir</button>
+                    `;
                     container.appendChild(div);
                 });
             }
-
             document.getElementById('cart-subtotal').innerText = data.subtotal;
             document.getElementById('cart-shipping').innerText = data.shipping;
             document.getElementById('cart-discount').innerText = formatCurrency(discount);
             document.getElementById('cart-total').innerText = data.total;
-
-
         }
 
         function formatCurrency(value) {
@@ -345,7 +337,6 @@
                 document.getElementById('address-result').innerText = 'CEP Invalido';
                 return;
             }
-
             fetch('https://viacep.com.br/ws/' + cep + '/json/')
                 .then(res => res.json())
                 .then(data => {
@@ -366,6 +357,7 @@
         function applyCoupon() {
             const code = document.getElementById('coupon_code').value.trim();
             if (!code) return alert('Por favor entre com cupon valido')
+
             fetch('<?= site_url('cart/apply_coupon') ?>', {
                     method: 'POST',
                     headers: {

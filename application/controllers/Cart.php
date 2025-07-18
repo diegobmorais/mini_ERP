@@ -12,14 +12,13 @@ class Cart extends CI_Controller
         $this->load->helper('shipping');
         $this->load->helper('cart');
     }
-    // Aplica o cupom de desconto
     public function apply_coupon()
     {
         $code = strtoupper(trim($this->input->post('coupon_code')));
         $cart = $this->session->userdata('cart') ?? [];
-        $subtotal = calculate_subtotal($cart);        
+        $subtotal = calculate_subtotal($cart);
         $coupon = $this->Coupon_model->get_valid($code, $subtotal);
-        // var_dump($coupon).die;
+
         if ($coupon) {
             $this->session->set_userdata('coupon', $coupon);
             $this->output
@@ -29,7 +28,7 @@ class Cart extends CI_Controller
             $this->session->unset_userdata('coupon');
             echo json_encode(['success' => false, 'message' => 'Cupom invalido ou expirado']);
         }
-    } 
+    }
     public function get_cart_totals()
     {
         $cart = $this->session->userdata('cart') ?? [];
@@ -62,14 +61,12 @@ class Cart extends CI_Controller
                     'message' => 'Carrinho vazio.'
                 ]));
         }
-
-        // Calcula os valores
         $subtotal = calculate_subtotal($cart);
         $discount = $coupon['amount'] ?? 0;
         $shipping_fee = calculate_shipping_fee($subtotal);
         $total = $subtotal - $discount + $shipping_fee;
         $order_number = strtoupper(uniqid('ORD'));
-        // var_dump($post).die;
+
         $order_data = [
             'order_number'        => $order_number,
             'customer_name'       => $post['customer_name'],
@@ -92,7 +89,6 @@ class Cart extends CI_Controller
         $this->load->model('Order_model');
         $order_id = $this->Order_model->create_order($order_data);
 
-        //atualiza estoque
         foreach ($cart as $item) {
             $stock_id = $item['stock_id'] ?? null;
             $quantity = $item['quantity'] ?? 0;
@@ -117,10 +113,8 @@ class Cart extends CI_Controller
                     'message' => 'Erro ao salvar o pedido no banco de dados.'
                 ]));
         }
-        // Envia o e-mail de confirmação
         $this->emailservice->send_order_email($order_data, $cart);
 
-        // Limpa carrinho e cupom
         $this->session->unset_userdata(['cart', 'coupon']);
 
         return $this->output

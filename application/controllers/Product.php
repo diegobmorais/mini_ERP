@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Product extends CI_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -19,14 +18,12 @@ class Product extends CI_Controller
         foreach ($data['products'] as &$product) {
             $product->variations = $this->Stock_model->get_stock_by_product_id($product->id);
         }
-
         $product_id = $this->input->get('id');
 
         if ($product_id) {
             $data['edit_product'] = $this->Product_model->get_by_id($product_id);
             $data['edit_stock'] = $this->Product_model->get_stock_by_product($product_id);
         }
-
         $data['cart'] = $this->session->userdata('cart') ?? [];
         $subtotal = $subtotal = calculate_subtotal($data['cart']);
         $shipping = calculate_shipping_fee($subtotal);
@@ -39,7 +36,6 @@ class Product extends CI_Controller
             'discount' => number_format($discount, 2, ',', '.'),
             'total' => number_format($subtotal + $shipping, 2, ',', '.'),
         ];
-
         $this->load->view('products/product_form', $data);
     }
 
@@ -57,11 +53,9 @@ class Product extends CI_Controller
         } else {
             $product_id = $this->Product_model->insert($name, $price);
         }
-
         for ($i = 0; $i < count($variations); $i++) {
             $this->Product_model->insert_stock($product_id, $variations[$i], $quantities[$i]);
         }
-
         redirect('product');
     }
     public function buy()
@@ -73,7 +67,6 @@ class Product extends CI_Controller
             echo json_encode(['status' => 'error', 'message' => 'Produto ou variação inválidos.']);
             return;
         }
-
         $product = $this->Product_model->get_by_id($product_id);
         $stock   = $this->Stock_model->get_stock_by_id($stock_id);
 
@@ -81,12 +74,10 @@ class Product extends CI_Controller
             echo json_encode(['status' => 'error', 'message' => 'Produto ou variação não encontrados.']);
             return;
         }
-
         $cart = $this->session->userdata('cart') ?? [];
         $found = false;
         $totalQty = 0;
-
-        // Verifica se já existe no carrinho e atualiza
+    
         foreach ($cart as &$item) {
             if ($item['stock_id'] == $stock_id) {
                 if ($item['quantity'] + 1 > $stock->quantity) {
@@ -100,9 +91,8 @@ class Product extends CI_Controller
             }
             $totalQty += $item['quantity'];
         }
-        unset($item); // importante para evitar bugs ao usar &$item
-
-        // Se não encontrou, adiciona novo item
+        unset($item); 
+    
         if (!$found) {
             if (1 > $stock->quantity) {
                 echo json_encode(['status' => 'error', 'message' => 'Estoque insuficiente.']);
@@ -117,10 +107,8 @@ class Product extends CI_Controller
                 'quantity'   => 1,
             ];
         }
-
         $this->session->set_userdata('cart', $cart);
-
-        // Recalcular valores
+   
         $subtotal = array_reduce($cart, function ($carry, $item) {
             $unit_price = isset($item['unit_price']) ? (float)$item['unit_price'] : 0;
             $quantity = isset($item['quantity']) ? (int)$item['quantity'] : 0;
@@ -138,8 +126,6 @@ class Product extends CI_Controller
             'total' => number_format($total, 2, ',', '.')
         ]);
     }
-
-
     public function remove_cart_item()
     {
         $index = $this->input->post('index');
@@ -149,27 +135,23 @@ class Product extends CI_Controller
             echo json_encode(['status' => 'error', 'message' => 'Item não encontrado no carrinho']);
             return;
         }
-
         if ($cart[$index]['quantity'] > 1) {
             $cart[$index]['quantity']--;
         } else {
             array_splice($cart, $index, 1);
         }
-
         $this->session->set_userdata('cart', $cart);
 
         $subtotal = 0;
         foreach ($cart as $item) {
             $subtotal += $item['unit_price'] * $item['quantity'];
         }
-
         $shipping = calculate_shipping_fee($subtotal);
         $total = $subtotal + $shipping;
 
         if (empty($cart)) {
             $this->session->unset_userdata('coupon');
         }
-
         echo json_encode([
             'status' => 'ok',
             'cart' => $cart,

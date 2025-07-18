@@ -3,18 +3,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class EmailService
 {
-
     protected $CI;
-
     public function __construct()
     {
         $this->CI = &get_instance();
         $this->CI->load->library('email');
         $this->CI->load->config('email');
     }
-
     public function send_order_email($order, $items)
-    {   
+    {
         $this->CI->email->from($this->CI->config->item('smtp_user'), 'Mini ERP');
 
         $this->CI->email->to($order['customer_email']);

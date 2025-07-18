@@ -8,8 +8,9 @@ if (!function_exists('calculate_shipping_fee')) {
             return 0;
         } elseif ($subtotal >= 52 && $subtotal <= 166.59) {
             return 15;
-        } else {
+        } elseif($subtotal >= 1) {
             return 20;
         }
+        return 0;
     }
 }
