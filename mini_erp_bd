@@ -1,0 +1,91 @@
+-- --------------------------------------------------------
+-- Servidor:                     127.0.0.1
+-- Versão do servidor:           8.3.0 - MySQL Community Server - GPL
+-- OS do Servidor:               Win64
+-- HeidiSQL Versão:              12.10.0.7024
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+-- Copiando estrutura para tabela mini_erp.coupons
+CREATE TABLE IF NOT EXISTS `coupons` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `min_subtotal` decimal(10,2) DEFAULT '0.00',
+  `expires_at` date NOT NULL,
+  `is_active` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela mini_erp.orders
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `order_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `customer_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `customer_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `customer_phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `postal_code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address_number` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address_complement` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `neighborhood` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `state` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subtotal` decimal(10,2) NOT NULL,
+  `discount` decimal(10,2) DEFAULT '0.00',
+  `shipping_fee` decimal(10,2) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `coupon_code` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('pending','confirmed','shipped','delivered','canceled') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `order_number` (`order_number`),
+  KEY `coupon_code` (`coupon_code`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela mini_erp.products
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `is_active` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela mini_erp.stock
+CREATE TABLE IF NOT EXISTS `stock` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int NOT NULL,
+  `variation` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `quantity` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Exportação de dados foi desmarcado.
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

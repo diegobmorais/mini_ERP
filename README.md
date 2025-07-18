@@ -58,7 +58,7 @@ Esta aplicação permite o gerenciamento básico de produtos, variações e esto
 
 ## Estrutura do Banco de Dados
 
-O sistema utiliza quatro tabelas principais:
+O sistema utiliza quatro tabelas principais: (Dump do bd no repositorio)
 
 - `products`: informações dos produtos.
 - `stock`: variações e quantidades em estoque.
@@ -73,4 +73,5 @@ O sistema utiliza quatro tabelas principais:
 
    ```bash
    git clone https://github.com/diegobmorais/mini_ERP.git
+  
 
